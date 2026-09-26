@@ -1,0 +1,636 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "跨区域通道协同台账",
+  "description": "把区段、部门、资源要素和依赖记录整理成可计算的协同产品资料。顶层封闭、实体可扩展，便于多方各自补充字段。",
+  "type": "object",
+  "required": [
+    "domain",
+    "product",
+    "version",
+    "sample_id",
+    "departments",
+    "nodes",
+    "dependencies",
+    "commitments",
+    "changes",
+    "plans",
+    "meetings",
+    "disasters",
+    "claims",
+    "conclusions"
+  ],
+  "properties": {
+    "domain": {
+      "const": "corridor-coordination"
+    },
+    "product": {
+      "const": "corridor-collaboration-ledger"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "sample_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string"
+    },
+    "departments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/department"
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dependency"
+      }
+    },
+    "commitments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/commitment"
+      }
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/change"
+      }
+    },
+    "plans": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/plan"
+      }
+    },
+    "meetings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/meeting"
+      }
+    },
+    "disasters": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/disaster"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    },
+    "conclusions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/conclusion"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "department": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "node": {
+      "type": "object",
+      "description": "依赖图节点：通道结构、许可、标准、资金、施工前置、算力数据设施、韧性措施七类均可入图",
+      "required": [
+        "id",
+        "kind",
+        "element",
+        "name",
+        "region",
+        "owner",
+        "status",
+        "revision",
+        "updated_by",
+        "updated_at"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "corridor-structure",
+            "permit",
+            "standard",
+            "funding",
+            "construction-prerequisite",
+            "compute-data-facility",
+            "resilience-measure"
+          ]
+        },
+        "element": {
+          "description": "资源要素类别，堵点汇总按此归类",
+          "enum": [
+            "corridor-structure",
+            "land",
+            "sea",
+            "energy",
+            "ecology",
+            "construction-permit",
+            "local-standard",
+            "technical-standard",
+            "regulation",
+            "funding",
+            "site",
+            "supporting-network",
+            "material",
+            "compute-data",
+            "resilience"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string",
+          "description": "责任部门，引用 departments.id"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "in-progress",
+            "satisfied",
+            "failed",
+            "suspended"
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "乐观并发版本号，多方同时更新时据此拒绝过期基线"
+        },
+        "updated_by": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string",
+          "description": "带时区偏移的 ISO 8601 时间"
+        },
+        "attrs": {
+          "type": "object",
+          "description": "扩展工程字段"
+        },
+        "sensitivity": {
+          "type": "object",
+          "description": "字段级密级：attrs.* → internal | sensitive"
+        }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "required": [
+        "id",
+        "from",
+        "to",
+        "type",
+        "hard"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string",
+          "description": "前置节点"
+        },
+        "to": {
+          "type": "string",
+          "description": "被前置卡住的节点"
+        },
+        "type": {
+          "const": "prerequisite"
+        },
+        "hard": {
+          "type": "boolean",
+          "description": "硬前置参与阻断；软关联只参与风险传播"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "commitment": {
+      "type": "object",
+      "description": "地方承诺：责任人、截止日、依据、受影响节点四要素齐全才算有效",
+      "required": [
+        "id",
+        "party",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "party": {
+          "type": "string"
+        },
+        "owner_person": {
+          "type": "string",
+          "description": "责任人（四要素之一）"
+        },
+        "deadline": {
+          "type": "string",
+          "description": "截止日（四要素之一）"
+        },
+        "basis": {
+          "type": "string",
+          "description": "依据（四要素之一）"
+        },
+        "affected_nodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "受影响节点（四要素之一）"
+        },
+        "status": {
+          "enum": [
+            "open",
+            "fulfilled"
+          ]
+        },
+        "fulfilled_at": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "change": {
+      "type": "object",
+      "description": "法规或技术标准变化，影响沿依赖图自动传播",
+      "required": [
+        "id",
+        "kind",
+        "target",
+        "effective",
+        "summary",
+        "issued_by"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "standard-update",
+            "regulation-update"
+          ]
+        },
+        "target": {
+          "type": "string"
+        },
+        "effective": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "issued_by": {
+          "type": "string"
+        }
+      }
+    },
+    "plan": {
+      "type": "object",
+      "description": "方案版本：延期、替代路线、争议裁决、灾害重排都生成新版本，被替换方案永久保留",
+      "required": [
+        "id",
+        "node",
+        "version",
+        "status",
+        "window"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "node": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "status": {
+          "enum": [
+            "active",
+            "superseded",
+            "completed"
+          ]
+        },
+        "window": {
+          "type": "object",
+          "required": [
+            "start",
+            "end"
+          ],
+          "properties": {
+            "start": {
+              "type": "string"
+            },
+            "end": {
+              "type": "string"
+            }
+          }
+        },
+        "route": {
+          "type": "string"
+        },
+        "replaces": {
+          "type": "string"
+        },
+        "superseded_by": {
+          "type": "string"
+        },
+        "supersede_reason": {
+          "enum": [
+            "delay",
+            "alternative-route",
+            "dispute-ruling",
+            "disaster-reschedule"
+          ]
+        },
+        "superseded_at": {
+          "type": "string"
+        },
+        "supersede_decided_by": {
+          "type": "string"
+        },
+        "ruling": {
+          "type": "string",
+          "description": "争议裁决依据，争议裁决替换时必填"
+        },
+        "disaster": {
+          "type": "string",
+          "description": "触发重排的灾害记录"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "meeting": {
+      "type": "object",
+      "description": "跨时区会议：held_at 带时区偏移，排序按真实瞬时而非当地时间",
+      "required": [
+        "id",
+        "held_at",
+        "timezone",
+        "participants",
+        "decisions"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "held_at": {
+          "type": "string",
+          "description": "带时区偏移的 ISO 8601 瞬时"
+        },
+        "timezone": {
+          "type": "string",
+          "description": "IANA 时区名"
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "decisions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "disaster": {
+      "type": "object",
+      "description": "灾害事件：引发计划重排并跟踪服务恢复",
+      "required": [
+        "id",
+        "kind",
+        "name",
+        "occurred_at",
+        "affected_nodes",
+        "triggered_reschedule",
+        "recovery"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "typhoon",
+            "flood",
+            "earthquake",
+            "other"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "occurred_at": {
+          "type": "string"
+        },
+        "affected_nodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "triggered_reschedule": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "因灾重排生成的方案版本"
+        },
+        "recovery": {
+          "type": "object",
+          "required": [
+            "stages",
+            "restored_at"
+          ],
+          "properties": {
+            "stages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "status"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "enum": [
+                      "pending",
+                      "in-progress",
+                      "done"
+                    ]
+                  },
+                  "at": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              }
+            },
+            "restored_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "description": "完成声明：许可、工程、联调三类证据齐全才成立，可逐条下钻",
+      "required": [
+        "id",
+        "node",
+        "statement",
+        "declared_by",
+        "declared_at",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "node": {
+          "type": "string"
+        },
+        "statement": {
+          "type": "string"
+        },
+        "declared_by": {
+          "type": "string"
+        },
+        "declared_at": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "permit",
+            "engineering",
+            "joint-commissioning"
+          ]
+        },
+        "title": {
+          "type": "string"
+        },
+        "ref": {
+          "type": "string"
+        },
+        "issued_by": {
+          "type": "string"
+        },
+        "issued_at": {
+          "type": "string"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "conclusion": {
+      "type": "object",
+      "description": "区段原始结论；区域汇总只引用、不改写、不合并",
+      "required": [
+        "id",
+        "node",
+        "region",
+        "summary",
+        "recorded_by",
+        "recorded_at"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "node": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "recorded_by": {
+          "type": "string"
+        },
+        "recorded_at": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,519 @@
+{
+  "domain": "corridor-coordination",
+  "product": "corridor-collaboration-ledger",
+  "version": 2,
+  "sample_id": "sample-101",
+  "generated_at": "2026-09-20T08:00:00+08:00",
+  "departments": [
+    { "id": "dept-lead", "name": "通道建设牵头单位" },
+    { "id": "dept-north-construction", "name": "北湾建设局" },
+    { "id": "dept-north-land", "name": "北湾自然资源局" },
+    { "id": "dept-south-construction", "name": "青屿建设局" },
+    { "id": "dept-south-standards", "name": "青屿标准委" },
+    { "id": "dept-energy", "name": "能源保障联合专班" },
+    { "id": "dept-data", "name": "算力数据专班" }
+  ],
+  "nodes": [
+    {
+      "id": "sec-a0",
+      "kind": "corridor-structure",
+      "element": "corridor-structure",
+      "name": "北湾先行段",
+      "region": "region-north",
+      "owner": "dept-north-construction",
+      "status": "satisfied",
+      "revision": 4,
+      "updated_by": "dept-north-construction",
+      "updated_at": "2026-08-05T10:30:00+08:00"
+    },
+    {
+      "id": "sec-a1",
+      "kind": "corridor-structure",
+      "element": "corridor-structure",
+      "name": "北湾陆上段",
+      "region": "region-north",
+      "owner": "dept-north-construction",
+      "status": "in-progress",
+      "revision": 3,
+      "updated_by": "dept-north-construction",
+      "updated_at": "2026-09-18T09:30:00+08:00"
+    },
+    {
+      "id": "sec-a2",
+      "kind": "corridor-structure",
+      "element": "corridor-structure",
+      "name": "跨海段",
+      "region": "region-north",
+      "owner": "dept-north-construction",
+      "status": "pending",
+      "revision": 2,
+      "updated_by": "dept-north-construction",
+      "updated_at": "2026-09-12T11:00:00+08:00",
+      "attrs": {
+        "length_km": 18.6,
+        "geology_survey": "跨海段地质详勘数据（虚构敏感字段）"
+      },
+      "sensitivity": {
+        "attrs.geology_survey": "sensitive"
+      }
+    },
+    {
+      "id": "sec-b1",
+      "kind": "corridor-structure",
+      "element": "corridor-structure",
+      "name": "青屿陆上段",
+      "region": "region-south",
+      "owner": "dept-south-construction",
+      "status": "in-progress",
+      "revision": 5,
+      "updated_by": "dept-south-construction",
+      "updated_at": "2026-09-20T09:05:00+08:00"
+    },
+    {
+      "id": "permit-land-a1",
+      "kind": "permit",
+      "element": "land",
+      "name": "北湾段用地批复",
+      "region": "region-north",
+      "owner": "dept-north-land",
+      "status": "pending",
+      "revision": 2,
+      "updated_by": "dept-north-land",
+      "updated_at": "2026-09-16T15:00:00+08:00"
+    },
+    {
+      "id": "permit-sea-a2",
+      "kind": "permit",
+      "element": "sea",
+      "name": "跨海段用海批复",
+      "region": "region-north",
+      "owner": "dept-north-land",
+      "status": "in-progress",
+      "revision": 2,
+      "updated_by": "dept-north-land",
+      "updated_at": "2026-09-14T10:20:00+08:00"
+    },
+    {
+      "id": "permit-energy-b1",
+      "kind": "permit",
+      "element": "energy",
+      "name": "青屿段用能指标",
+      "region": "region-south",
+      "owner": "dept-energy",
+      "status": "satisfied",
+      "revision": 1,
+      "updated_by": "dept-energy",
+      "updated_at": "2026-08-28T17:00:00+08:00"
+    },
+    {
+      "id": "permit-eco-a2",
+      "kind": "permit",
+      "element": "ecology",
+      "name": "跨海段生态评估",
+      "region": "region-north",
+      "owner": "dept-north-land",
+      "status": "in-progress",
+      "revision": 2,
+      "updated_by": "dept-north-land",
+      "updated_at": "2026-09-11T14:40:00+08:00"
+    },
+    {
+      "id": "std-local-south",
+      "kind": "standard",
+      "element": "local-standard",
+      "name": "青屿地方桥梁荷载标准",
+      "region": "region-south",
+      "owner": "dept-south-standards",
+      "status": "in-progress",
+      "revision": 3,
+      "updated_by": "dept-south-standards",
+      "updated_at": "2026-09-19T16:00:00+08:00"
+    },
+    {
+      "id": "reg-sea",
+      "kind": "standard",
+      "element": "regulation",
+      "name": "海域使用监管规定",
+      "region": "region-north",
+      "owner": "dept-north-land",
+      "status": "satisfied",
+      "revision": 1,
+      "updated_by": "dept-north-land",
+      "updated_at": "2026-07-01T09:00:00+08:00"
+    },
+    {
+      "id": "fund-a1",
+      "kind": "funding",
+      "element": "funding",
+      "name": "北湾段建设资金",
+      "region": "region-north",
+      "owner": "dept-lead",
+      "status": "satisfied",
+      "revision": 1,
+      "updated_by": "dept-lead",
+      "updated_at": "2026-07-20T11:00:00+08:00"
+    },
+    {
+      "id": "fund-a2",
+      "kind": "funding",
+      "element": "funding",
+      "name": "跨海段建设资金",
+      "region": "region-north",
+      "owner": "dept-lead",
+      "status": "pending",
+      "revision": 1,
+      "updated_by": "dept-lead",
+      "updated_at": "2026-09-01T10:00:00+08:00",
+      "attrs": {
+        "budget_breakdown": "跨海段资金分项明细（内部）"
+      },
+      "sensitivity": {
+        "attrs.budget_breakdown": "internal"
+      }
+    },
+    {
+      "id": "pre-site-a1",
+      "kind": "construction-prerequisite",
+      "element": "site",
+      "name": "A1施工场地移交",
+      "region": "region-north",
+      "owner": "dept-north-construction",
+      "status": "pending",
+      "revision": 2,
+      "updated_by": "dept-north-construction",
+      "updated_at": "2026-09-17T08:30:00+08:00"
+    },
+    {
+      "id": "net-power-b1",
+      "kind": "construction-prerequisite",
+      "element": "supporting-network",
+      "name": "青屿配套电网",
+      "region": "region-south",
+      "owner": "dept-energy",
+      "status": "in-progress",
+      "revision": 3,
+      "updated_by": "dept-energy",
+      "updated_at": "2026-09-19T11:20:00+08:00"
+    },
+    {
+      "id": "dc-b1",
+      "kind": "compute-data-facility",
+      "element": "compute-data",
+      "name": "青屿算力数据设施",
+      "region": "region-south",
+      "owner": "dept-data",
+      "status": "in-progress",
+      "revision": 2,
+      "updated_by": "dept-data",
+      "updated_at": "2026-09-18T15:45:00+08:00"
+    },
+    {
+      "id": "res-a2",
+      "kind": "resilience-measure",
+      "element": "resilience",
+      "name": "跨海段防台风韧性措施",
+      "region": "region-north",
+      "owner": "dept-north-construction",
+      "status": "in-progress",
+      "revision": 1,
+      "updated_by": "dept-north-construction",
+      "updated_at": "2026-09-10T09:00:00+08:00"
+    }
+  ],
+  "dependencies": [
+    { "id": "dep-01", "from": "permit-land-a1", "to": "sec-a1", "type": "prerequisite", "hard": true, "note": "用地批复是A1开工前置" },
+    { "id": "dep-02", "from": "pre-site-a1", "to": "sec-a1", "type": "prerequisite", "hard": true, "note": "场地未移交无法进场" },
+    { "id": "dep-03", "from": "fund-a1", "to": "sec-a1", "type": "prerequisite", "hard": true, "note": "北湾段资金已落实" },
+    { "id": "dep-04", "from": "sec-a0", "to": "sec-a1", "type": "prerequisite", "hard": true, "note": "先行段便道与经验共享" },
+    { "id": "dep-05", "from": "permit-sea-a2", "to": "sec-a2", "type": "prerequisite", "hard": true, "note": "用海批复是跨海段开工前置" },
+    { "id": "dep-06", "from": "permit-eco-a2", "to": "sec-a2", "type": "prerequisite", "hard": true, "note": "生态评估未通过不得施工" },
+    { "id": "dep-07", "from": "fund-a2", "to": "sec-a2", "type": "prerequisite", "hard": true, "note": "跨海段资金未到位" },
+    { "id": "dep-08", "from": "res-a2", "to": "sec-a2", "type": "prerequisite", "hard": true, "note": "防台韧性措施未到位不得跨海施工" },
+    { "id": "dep-09", "from": "sec-a1", "to": "sec-a2", "type": "prerequisite", "hard": true, "note": "A1贯通后才具备跨海段联调条件" },
+    { "id": "dep-10", "from": "std-local-south", "to": "sec-b1", "type": "prerequisite", "hard": true, "note": "设计须符合现行地方标准" },
+    { "id": "dep-11", "from": "net-power-b1", "to": "sec-b1", "type": "prerequisite", "hard": true, "note": "配套电网未通，盾构无法满负荷" },
+    { "id": "dep-12", "from": "permit-energy-b1", "to": "net-power-b1", "type": "prerequisite", "hard": true, "note": "用能指标已落实" },
+    { "id": "dep-13", "from": "net-power-b1", "to": "dc-b1", "type": "prerequisite", "hard": true, "note": "算力设施供电依赖配套电网" },
+    { "id": "dep-14", "from": "dc-b1", "to": "sec-b1", "type": "prerequisite", "hard": true, "note": "联调依赖算力数据设施" },
+    { "id": "dep-15", "from": "std-local-south", "to": "dc-b1", "type": "prerequisite", "hard": false, "note": "标准升版影响设施设计复核（不阻断）" },
+    { "id": "dep-16", "from": "reg-sea", "to": "permit-sea-a2", "type": "prerequisite", "hard": true, "note": "用海批复须符合海域监管规定" }
+  ],
+  "commitments": [
+    {
+      "id": "cmt-01",
+      "party": "dept-north-land",
+      "owner_person": "北湾自然资源局用地保障岗位责任人",
+      "deadline": "2026-10-15",
+      "basis": "2026-09-10联席会纪要第3条（虚构）",
+      "affected_nodes": ["permit-land-a1"],
+      "status": "open"
+    },
+    {
+      "id": "cmt-02",
+      "party": "dept-north-land",
+      "owner_person": "北湾自然资源局用海保障岗位责任人",
+      "basis": "口头承诺（无纪要）",
+      "status": "open",
+      "note": "承诺加快用海批复，但未登记截止日与受影响节点，按无效承诺处理"
+    },
+    {
+      "id": "cmt-03",
+      "party": "dept-energy",
+      "owner_person": "能源保障联合专班责任人",
+      "deadline": "2026-08-31",
+      "basis": "能源保障专题会纪要（虚构）",
+      "affected_nodes": ["permit-energy-b1"],
+      "status": "fulfilled",
+      "fulfilled_at": "2026-08-28"
+    },
+    {
+      "id": "cmt-04",
+      "party": "dept-energy",
+      "owner_person": "能源保障联合专班电网组责任人",
+      "deadline": "2026-09-01",
+      "basis": "2026-08-20配套电网专题会纪要（虚构）",
+      "affected_nodes": ["net-power-b1"],
+      "status": "open"
+    }
+  ],
+  "changes": [
+    {
+      "id": "chg-01",
+      "kind": "standard-update",
+      "target": "std-local-south",
+      "effective": "2026-11-01",
+      "summary": "青屿地方桥梁荷载标准升版，设计复核范围扩大",
+      "issued_by": "dept-south-standards"
+    },
+    {
+      "id": "chg-02",
+      "kind": "regulation-update",
+      "target": "reg-sea",
+      "effective": "2027-01-01",
+      "summary": "海域使用监管规定修订，用海批复材料要求调整",
+      "issued_by": "dept-north-land"
+    }
+  ],
+  "plans": [
+    {
+      "id": "plan-a0-v1",
+      "node": "sec-a0",
+      "version": 1,
+      "status": "completed",
+      "window": { "start": "2026-03-01", "end": "2026-07-31" },
+      "note": "先行段已完工移交"
+    },
+    {
+      "id": "plan-a1-v1",
+      "node": "sec-a1",
+      "version": 1,
+      "status": "superseded",
+      "window": { "start": "2026-08-01", "end": "2026-12-31" },
+      "superseded_by": "plan-a1-v2",
+      "supersede_reason": "delay",
+      "superseded_at": "2026-09-05T10:00:00+08:00",
+      "supersede_decided_by": "dept-lead",
+      "note": "用地批复滞后，整体顺延"
+    },
+    {
+      "id": "plan-a1-v2",
+      "node": "sec-a1",
+      "version": 2,
+      "status": "superseded",
+      "window": { "start": "2026-10-01", "end": "2027-03-31" },
+      "replaces": "plan-a1-v1",
+      "superseded_by": "plan-a1-v3",
+      "supersede_reason": "disaster-reschedule",
+      "disaster": "dss-01",
+      "superseded_at": "2026-09-16T09:00:00+08:00",
+      "supersede_decided_by": "dept-lead",
+      "note": "台风过后重排进场窗口"
+    },
+    {
+      "id": "plan-a1-v3",
+      "node": "sec-a1",
+      "version": 3,
+      "status": "active",
+      "window": { "start": "2026-10-20", "end": "2027-04-15" },
+      "replaces": "plan-a1-v2"
+    },
+    {
+      "id": "plan-a2-v1",
+      "node": "sec-a2",
+      "version": 1,
+      "status": "superseded",
+      "window": { "start": "2026-12-01", "end": "2027-10-31" },
+      "route": "东线桥位",
+      "superseded_by": "plan-a2-v2",
+      "supersede_reason": "alternative-route",
+      "superseded_at": "2026-09-12T16:00:00+08:00",
+      "supersede_decided_by": "dept-lead",
+      "note": "生态评估不支持东线，改西线桥位"
+    },
+    {
+      "id": "plan-a2-v2",
+      "node": "sec-a2",
+      "version": 2,
+      "status": "active",
+      "window": { "start": "2027-01-01", "end": "2027-12-31" },
+      "route": "西线桥位",
+      "replaces": "plan-a2-v1"
+    },
+    {
+      "id": "plan-b1-v1",
+      "node": "sec-b1",
+      "version": 1,
+      "status": "superseded",
+      "window": { "start": "2026-10-01", "end": "2027-06-30" },
+      "route": "桥梁方案",
+      "superseded_by": "plan-b1-v2",
+      "supersede_reason": "dispute-ruling",
+      "ruling": "跨区域协调会裁决书 协裁〔2026〕4号（虚构）",
+      "superseded_at": "2026-09-08T15:00:00+08:00",
+      "supersede_decided_by": "dept-lead",
+      "note": "桥隧方案争议经裁决采用隧道方案"
+    },
+    {
+      "id": "plan-b1-v2",
+      "node": "sec-b1",
+      "version": 2,
+      "status": "active",
+      "window": { "start": "2026-11-01", "end": "2027-08-31" },
+      "route": "隧道方案",
+      "replaces": "plan-b1-v1"
+    }
+  ],
+  "meetings": [
+    {
+      "id": "mtg-01",
+      "held_at": "2026-09-10T19:00:00+08:00",
+      "timezone": "Asia/Shanghai",
+      "participants": ["dept-lead", "dept-north-land", "dept-north-construction"],
+      "decisions": [
+        "北湾自然资源局承诺10月15日前完成用地批复（登记为cmt-01）",
+        "先行段施工便道与经验移交A1"
+      ]
+    },
+    {
+      "id": "mtg-02",
+      "held_at": "2026-09-10T08:30:00-03:00",
+      "timezone": "America/Sao_Paulo",
+      "participants": ["dept-lead", "dept-data"],
+      "decisions": [
+        "确认算力设施核心设备供货周期",
+        "联调窗口另行会商"
+      ]
+    }
+  ],
+  "disasters": [
+    {
+      "id": "dss-01",
+      "kind": "typhoon",
+      "name": "台风'澜沧'（虚构）",
+      "occurred_at": "2026-09-15T06:30:00+08:00",
+      "affected_nodes": ["sec-a1", "pre-site-a1"],
+      "triggered_reschedule": ["plan-a1-v3"],
+      "recovery": {
+        "stages": [
+          { "name": "基坑排水", "status": "done", "at": "2026-09-17T18:00:00+08:00" },
+          { "name": "场地修复与便道恢复", "status": "in-progress", "at": null }
+        ],
+        "restored_at": null
+      }
+    },
+    {
+      "id": "dss-02",
+      "kind": "flood",
+      "name": "强降雨引发内涝（虚构）",
+      "occurred_at": "2026-09-24T22:10:00+08:00",
+      "affected_nodes": ["sec-b1", "net-power-b1"],
+      "triggered_reschedule": [],
+      "recovery": {
+        "stages": [],
+        "restored_at": null
+      }
+    }
+  ],
+  "claims": [
+    {
+      "id": "clm-01",
+      "node": "sec-a0",
+      "statement": "北湾先行段完工并具备移交条件",
+      "declared_by": "dept-north-construction",
+      "declared_at": "2026-08-05T10:00:00+08:00",
+      "evidence": [
+        {
+          "id": "ev-01",
+          "kind": "permit",
+          "title": "先行段用地与施工许可批复",
+          "ref": "北自然资许〔2026〕11号（虚构）",
+          "issued_by": "dept-north-land",
+          "issued_at": "2026-02-20",
+          "nodes": ["sec-a0"]
+        },
+        {
+          "id": "ev-02",
+          "kind": "engineering",
+          "title": "先行段工程竣工验收记录",
+          "ref": "验记-2026-073（虚构）",
+          "issued_by": "dept-north-construction",
+          "issued_at": "2026-07-30",
+          "nodes": ["sec-a0"]
+        },
+        {
+          "id": "ev-03",
+          "kind": "joint-commissioning",
+          "title": "先行段机电联调报告",
+          "ref": "联调-2026-019（虚构）",
+          "issued_by": "dept-data",
+          "issued_at": "2026-08-02",
+          "nodes": ["sec-a0"]
+        }
+      ]
+    },
+    {
+      "id": "clm-02",
+      "node": "sec-b1",
+      "statement": "青屿段主体完工",
+      "declared_by": "dept-south-construction",
+      "declared_at": "2026-09-20T09:00:00+08:00",
+      "evidence": [
+        {
+          "id": "ev-04",
+          "kind": "engineering",
+          "title": "青屿段主体结构施工记录",
+          "ref": "施记-2026-118（虚构）",
+          "issued_by": "dept-south-construction",
+          "issued_at": "2026-09-18",
+          "nodes": ["sec-b1"]
+        }
+      ]
+    }
+  ],
+  "conclusions": [
+    {
+      "id": "ccl-01",
+      "node": "sec-a1",
+      "region": "region-north",
+      "summary": "用地批复未落地，A1无法开工，建议牵头单位挂牌督办",
+      "recorded_by": "dept-north-construction",
+      "recorded_at": "2026-09-18T09:30:00+08:00"
+    },
+    {
+      "id": "ccl-02",
+      "node": "sec-a2",
+      "region": "region-north",
+      "summary": "生态评估支撑材料不足，建议维持西线替代桥位",
+      "recorded_by": "dept-north-construction",
+      "recorded_at": "2026-09-18T09:30:00+08:00"
+    },
+    {
+      "id": "ccl-03",
+      "node": "sec-b1",
+      "region": "region-south",
+      "summary": "地方标准升版需复核既有设计，B1工期承压",
+      "recorded_by": "dept-south-construction",
+      "recorded_at": "2026-09-19T14:00:00+08:00"
+    }
+  ]
+}
