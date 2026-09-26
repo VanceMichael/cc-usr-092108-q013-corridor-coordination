@@ -1,47 +1,368 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "领域上下文",
+  "title": "跨区域通道协同清障领域资料",
+  "description": "区段、部门、资源要素与依赖记录整理为可计算的协同产品资料。结构问题由读取器拒绝；承诺四要素缺失、证据不足等语义问题由分析器判定，不在此拒绝。",
   "type": "object",
   "required": [
     "domain",
     "version",
     "sample_id",
+    "corridors",
+    "regions",
+    "units",
     "actors",
-    "facts",
-    "constraints"
+    "nodes",
+    "edges",
+    "standard_changes",
+    "commitments",
+    "plans",
+    "delays",
+    "rulings",
+    "meetings",
+    "events",
+    "disasters",
+    "services",
+    "evidence",
+    "monthly_reports"
   ],
   "properties": {
-    "domain": {
-      "type": "string",
-      "minLength": 1
+    "domain": { "const": "corridor-coordination" },
+    "version": { "type": "integer", "minimum": 1 },
+    "sample_id": { "type": "string", "minLength": 1 },
+    "corridors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "regions": { "type": "array", "items": { "type": "string" } }
+        }
+      }
     },
-    "version": {
-      "type": "integer",
-      "minimum": 1
+    "regions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      }
     },
-    "sample_id": {
-      "type": "string",
-      "minLength": 1
+    "units": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "region"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "region": { "type": "string" }
+        }
+      }
     },
     "actors": {
       "type": "array",
       "minItems": 1,
       "items": {
-        "type": "string"
+        "type": "object",
+        "required": ["id", "name", "role", "unit", "timezone"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "role": { "type": "string" },
+          "unit": { "type": "string" },
+          "timezone": { "type": "string", "description": "IANA 时区名，用于跨时区会议换算" }
+        }
       }
     },
-    "facts": {
+    "nodes": {
       "type": "array",
       "minItems": 1,
       "items": {
-        "type": "string"
+        "type": "object",
+        "required": ["id", "kind", "name", "region", "owner_unit", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "kind": {
+            "enum": [
+              "section",
+              "permit",
+              "standard",
+              "regulation",
+              "funding",
+              "precondition",
+              "facility",
+              "network",
+              "resilience"
+            ]
+          },
+          "name": { "type": "string" },
+          "region": { "type": "string" },
+          "owner_unit": { "type": "string" },
+          "status": { "enum": ["pending", "in_progress", "completed", "suspended"] },
+          "category": {
+            "enum": ["land", "sea", "energy", "ecology"],
+            "description": "仅 permit 节点使用：用地/用海/用能/生态"
+          },
+          "scope": {
+            "enum": ["national", "local"],
+            "description": "仅 standard 节点使用：国家标准/地方标准"
+          },
+          "version": { "type": "string", "description": "standard/regulation 的现行版本" },
+          "amount_wan": { "type": "number", "description": "仅 funding 节点使用：资金额（万元）" },
+          "facility_type": {
+            "enum": ["compute", "data"],
+            "description": "仅 facility 节点使用：算力设施/数据设施"
+          },
+          "sensitive_fields": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "敏感工程字段名清单，对未授权视图脱敏"
+          }
+        }
       }
     },
-    "constraints": {
+    "edges": {
       "type": "array",
-      "minItems": 1,
       "items": {
-        "type": "string"
+        "type": "object",
+        "required": ["from", "to"],
+        "properties": {
+          "from": { "type": "string", "description": "上游节点：下游被它阻塞" },
+          "to": { "type": "string", "description": "下游节点" },
+          "rel": {
+            "enum": ["depends_on", "supplies", "protects"],
+            "default": "depends_on"
+          }
+        }
+      }
+    },
+    "standard_changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "node", "from_version", "to_version", "effective"],
+        "properties": {
+          "id": { "type": "string" },
+          "node": { "type": "string", "description": "被变更的 standard/regulation 节点" },
+          "from_version": { "type": "string" },
+          "to_version": { "type": "string" },
+          "effective": { "type": "string", "format": "date" },
+          "summary": { "type": "string" }
+        }
+      }
+    },
+    "commitments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "unit", "text", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "unit": { "type": "string", "description": "作出承诺的地方单位" },
+          "text": { "type": "string" },
+          "status": { "enum": ["open", "fulfilled", "breached", "withdrawn"] },
+          "responsible": { "type": "string", "description": "责任人，四要素之一" },
+          "deadline": { "type": "string", "format": "date", "description": "截止日，四要素之一" },
+          "basis": { "type": "string", "description": "依据（文件/会议决定），四要素之一" },
+          "affects": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "受影响节点，四要素之一"
+          },
+          "fulfilled_on": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "plans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "node", "version", "status", "created"],
+        "properties": {
+          "id": { "type": "string" },
+          "node": { "type": "string", "description": "计划所属节点（通常为区段）" },
+          "version": { "type": "integer", "minimum": 1 },
+          "status": { "enum": ["active", "superseded", "completed"] },
+          "created": { "type": "string", "format": "date" },
+          "summary": { "type": "string" },
+          "milestones": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "date"],
+              "properties": {
+                "name": { "type": "string" },
+                "date": { "type": "string", "format": "date" }
+              }
+            }
+          },
+          "superseded_by": { "type": "string", "description": "替换本计划的计划 id，被替换方案必须保留" },
+          "supersede_reason": {
+            "enum": ["delay", "alternative_route", "dispute_ruling", "disaster"],
+            "description": "被替换原因：延期/替代路线/争议裁决/灾害重排"
+          }
+        }
+      }
+    },
+    "delays": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "node", "plan", "announced", "days", "cause"],
+        "properties": {
+          "id": { "type": "string" },
+          "node": { "type": "string" },
+          "plan": { "type": "string" },
+          "announced": { "type": "string", "format": "date" },
+          "days": { "type": "integer", "minimum": 1 },
+          "cause": { "type": "string" }
+        }
+      }
+    },
+    "rulings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "issue", "decided_by", "date", "decision"],
+        "properties": {
+          "id": { "type": "string" },
+          "issue": { "type": "string" },
+          "decided_by": { "type": "string" },
+          "date": { "type": "string", "format": "date" },
+          "decision": { "type": "string" },
+          "superseded_plans": { "type": "array", "items": { "type": "string" } },
+          "adopted_plan": { "type": "string" }
+        }
+      }
+    },
+    "meetings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "held_at", "attendees", "decisions"],
+        "properties": {
+          "id": { "type": "string" },
+          "held_at": { "type": "string", "description": "UTC 时刻，ISO 8601" },
+          "attendees": { "type": "array", "items": { "type": "string" } },
+          "decisions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["text"],
+              "properties": {
+                "text": { "type": "string" },
+                "commitment": { "type": "string", "description": "决定催生的承诺 id" },
+                "plan": { "type": "string", "description": "决定采纳的计划 id" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "description": "多方同时更新的事件账本，追加式，不按时间排序也可判定冲突",
+      "items": {
+        "type": "object",
+        "required": ["id", "at", "actor", "type", "node", "field", "value"],
+        "properties": {
+          "id": { "type": "string" },
+          "at": { "type": "string", "description": "UTC 时刻，ISO 8601" },
+          "actor": { "type": "string" },
+          "type": {
+            "enum": [
+              "node_update",
+              "commitment_update",
+              "meeting_decision",
+              "delay_declared",
+              "disaster_declared",
+              "service_update"
+            ]
+          },
+          "node": { "type": "string" },
+          "field": { "type": "string" },
+          "value": {},
+          "base_version": { "type": "integer", "description": "更新方读取时的资料版本" }
+        }
+      }
+    },
+    "disasters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "occurred", "affected_nodes"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "occurred": { "type": "string", "format": "date" },
+          "affected_nodes": { "type": "array", "items": { "type": "string" } },
+          "replans": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["node", "new_plan"],
+              "properties": {
+                "node": { "type": "string" },
+                "new_plan": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "nodes", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "nodes": { "type": "array", "items": { "type": "string" } },
+          "status": { "enum": ["operational", "degraded", "suspended", "restored"] },
+          "suspended_at": { "type": "string" },
+          "restored_at": { "type": "string" },
+          "recovery_target": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "node", "kind", "title", "issued_by", "date"],
+        "properties": {
+          "id": { "type": "string" },
+          "node": { "type": "string", "description": "证据支撑的节点" },
+          "kind": {
+            "enum": ["permit_grant", "engineering_acceptance", "joint_commissioning"],
+            "description": "许可批复/工程验收/联调证明，完成声明须能下钻到这三类"
+          },
+          "title": { "type": "string" },
+          "issued_by": { "type": "string" },
+          "date": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "monthly_reports": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["node", "month", "progress", "summary"],
+        "properties": {
+          "node": { "type": "string" },
+          "month": { "type": "string", "pattern": "^\\d{4}-\\d{2}$" },
+          "progress": { "type": "number", "minimum": 0, "maximum": 100 },
+          "summary": { "type": "string", "description": "常见写法为模糊的“推进中”，需要解释器换算为可计算堵点" }
+        }
       }
     }
   },
